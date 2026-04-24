@@ -35,6 +35,8 @@ public class CommentService {
     private BotRepository botRepository;
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private NotificationService notificationService;
 
     public boolean createComment(CommentDTO commentDTO){
         String postId = commentDTO.getPostId();
@@ -94,6 +96,12 @@ public class CommentService {
                 throw new ResponseStatusException(TOO_MANY_REQUESTS, "Horizontal cap exceeded");
             }
             viralityDelta = 1;
+
+            String postOwnerId = resolvePostOwnerId(post);
+            if (postOwnerId != null) {
+                String notificationMessage = "Bot " + bot.getName() + " replied to your post";
+                notificationService.handleBotInteraction(postOwnerId, notificationMessage);
+            }
         } else {
             authorUser = userRepository.findById(authorId)
                     .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "User does not exist"));
@@ -132,6 +140,13 @@ public class CommentService {
         if (parentComment.isPresent() && parentComment.get().getWrittenBy() == Enums.WrittenByEnum.HUMAN) {
             return parentComment.get().getAuthorId();
         }
+        if (post.getUser() != null) {
+            return post.getUser().getId();
+        }
+        return null;
+    }
+
+    private String resolvePostOwnerId(Post post) {
         if (post.getUser() != null) {
             return post.getUser().getId();
         }
