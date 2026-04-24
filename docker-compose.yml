@@ -22,10 +22,22 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+      - redis
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/twitter_db
       SPRING_DATASOURCE_USERNAME: twitter_user
       SPRING_DATASOURCE_PASSWORD: twitter_pass
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+    networks:
+      - app_network
+  redis:
+    image: redis:7.2
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
     networks:
       - app_network
 
@@ -35,4 +47,4 @@ networks:
 
 volumes:
   postgres_data:
-  redis_data:/data:
+  redis_data:

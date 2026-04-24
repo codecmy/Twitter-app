@@ -1,4 +1,5 @@
 package com.example.Twitter.DTO;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,6 @@ import lombok.Setter;
 public class UserDetailsSignInDTO{
     @NotBlank(message = "UserName cannot be empty")
     private String userName;
-    @NotBlank(message = "Is user premium or not")
-    private boolean isPremium;
+    @JsonAlias("isPremium")
+    private Boolean premium;
 }

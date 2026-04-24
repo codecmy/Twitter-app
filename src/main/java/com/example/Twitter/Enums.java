@@ -5,4 +5,9 @@ public class Enums {
         BOT,
         HUMAN
     }
+    public enum InteractionType{
+        LIKE,
+        COMMENT,
+        REPLY
+    }
 }

@@ -8,9 +8,8 @@ import com.example.Twitter.Service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @Slf4j
@@ -56,8 +55,20 @@ public class BotController{
             }else {
                 return ResponseEntity.badRequest().build();
             }
+        }catch (ResponseStatusException e){
+            log.error(e.getReason());
+            return ResponseEntity.status(e.getStatusCode()).build();
         }catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+    @GetMapping("bot/{botId}/likes/{postId}")
+    public ResponseEntity<?> like(@PathVariable("botId") String botId,@PathVariable("postId") String postId){
+        try {
+            botService.botLikedPost(postId,botId);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
+        }
+        return ResponseEntity.ok().build();
     }
 }

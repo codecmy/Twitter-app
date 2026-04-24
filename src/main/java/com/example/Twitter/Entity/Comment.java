@@ -22,25 +22,25 @@ public class Comment{
     @Id
     @UuidGenerator
     private String id;
-    @Column(nullable = false)
+    @Column
     private String postIdFk;
-    @Column(nullable = false)
+    @Column
     private String authorId;
-    @Column(nullable = false,length = 300)
+    @Column(length = 300)
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id", nullable = true)
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
     @CreatedDate
-    @Column(nullable = false,updatable = false)
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column
     @Min(0)
     @Max(20)
     private int depth_level=0;
@@ -48,7 +48,7 @@ public class Comment{
     @Column
     private Enums.WrittenByEnum writtenBy;
 
-    @Column(nullable = false,updatable = false)
+    @Column(updatable = false)
     @LastModifiedDate
     private LocalDateTime updatedAt;
 }

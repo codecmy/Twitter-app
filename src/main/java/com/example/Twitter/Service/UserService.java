@@ -17,7 +17,7 @@ public class UserService{
         try {
             User user=new User();
             user.setUserName(userDetails.getUserName());
-            user.setPremium(userDetails.isPremium());
+            user.setPremium(Boolean.TRUE.equals(userDetails.getPremium()));
             userRepository.save(user);
             log.info("User created {}",user.getUserName());
             return true;

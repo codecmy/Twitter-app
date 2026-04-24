@@ -1,5 +1,6 @@
 package com.example.Twitter.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
@@ -38,13 +39,19 @@ public class Post{
 
     @Column(nullable = false)
     @Min(0)
+    private int botLikes=0;
+
+    @Column(nullable = false)
+    @Min(0)
     private int botDislikes=0;
 
-    @ManyToOne
+    @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = true)
+    @JsonIgnore
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
     @JoinColumn(name = "bot_id", nullable = true)
+    @JsonIgnore
     private Bot bot;
 }

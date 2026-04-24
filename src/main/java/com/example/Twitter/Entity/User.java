@@ -27,6 +27,6 @@ public class User{
     @Column(nullable = false)
     private boolean isPremium=false;
     @JsonIgnore
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Post> posts;
 }

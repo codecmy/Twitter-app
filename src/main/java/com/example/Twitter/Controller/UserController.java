@@ -8,6 +8,7 @@ import com.example.Twitter.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class UserController {
@@ -30,6 +31,9 @@ public class UserController {
     @GetMapping("/user-details/{userId}")
     private ResponseEntity<?> getUserDetails(@PathVariable String userId){
         User byUserId = userService.findByUserId(userId);
+        if (byUserId == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(byUserId);
     }
     @PostMapping("/user/comment")
@@ -41,6 +45,8 @@ public class UserController {
             }else {
                 return ResponseEntity.badRequest().build();
             }
+        }catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).build();
         }catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
